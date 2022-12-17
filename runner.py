@@ -169,7 +169,9 @@ class Runner:
       self.macropad.encoder_switch_debounced.update()
       if self.macropad.encoder_switch_debounced.pressed:
         if self._state != -1:
+          old_state = self._state
           self.set_global_state(-1) # -1 is a "config" mode
+          self.text[3].text = self._states[old_state].name
         else:
           self.set_global_state(self.state.get_selected_state()) # if we're in config mode, get the selected highlighted state.
           self.set_hostname_os_display()

@@ -96,12 +96,11 @@ class ConfigState(State):
       else:
         self.activeState += 1
       self.encoder_last = encoder_position
+      text[3].text = self.labels[self.activeState]
     if encoder_position < self.encoder_last:
       if self.activeState - 1 < 0:
         self.activeState = len(self.labels)-1
       else:
         self.activeState -= 1
-
       self.encoder_last = encoder_position
-    text[3].text = self.labels[self.activeState]
-    # text.show()
+      text[3].text = self.labels[self.activeState]

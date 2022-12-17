@@ -19,6 +19,8 @@ from key_maps import *
 
 runner = Runner()
 config = ConfigState()
+config.name = "MODE SELECT!"
+config.rotary_label = "Rotate for modes"
 ten_key = State()
 ten_key.key_map = TEN_KEY_MAP
 ten_key.use_rainbow = True
