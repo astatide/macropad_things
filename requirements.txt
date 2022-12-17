@@ -1,0 +1,3 @@
+adafruit-board-toolkit
+pyserial
+adafruit-circuitpython-minimqtt

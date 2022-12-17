@@ -57,7 +57,7 @@ class _Rpc:
                 if not incoming_packet and timeout is not None:
                     if (time.monotonic() - response_start_time) >= timeout:
                         return self.create_response_packet(error=True, message="Timed out waiting for response")
-                await asyncio.sleep(0.001)
+                await asyncio.sleep(0.01)
             data = self._serial.read(self._serial.in_waiting)
             if data:
                 try:

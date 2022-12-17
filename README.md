@@ -1,10 +1,18 @@
 This repo has code I use to personalize my [Adafruit MacroPad RP2040](https://learn.adafruit.com/adafruit-macropad-rp2040) using [CircuitPython](https://docs.circuitpython.org/en/latest/README.html).
 
 currently it allows for
-- switching between Mac OS desktops by turning the encoder (knob) right or left
-- toggle Zoom audio
-- toggle Zoom video
-- toggle Zoom floating meeting controls
+- 10 key pad
+- rainbow scanning!
+- modal shifting!
+- printing your hostname, username, and operating system type!
+
+The requirements.txt is for your host computer, in case you wish to have the macropad display the information above.  It won't block, but it's currently setup to have the LED blink and attempt to retry for... forever.  Also, you'll need a boot.py which I forgot to add so far.
+
+I took liberally from https://learn.adafruit.com/macropad-remote-procedure-calls-over-usb-to-control-home-assistant which has a lot of the info/code.  I plan on adding a HomeAssistant layer/mode/whatever to control stuff.
+
+Currently, upon loading and getting it all working, you click to enter a selection mode, and scroll through the modes.  Currently there's just three (technically 4 if you include the "selection" mode): 10Key, COLORTEST, and off.  10Key is pretty self explanatory, off just lengthens the time period between loops and turns the LEDs off, and COLORTEST allows you to fidget with the keys.  Watch as everytime you press a key, it immediately jumps to a new color before fading back to the gradient rainbow scanning!  Wheeeeeee!
+
+What follows is (part) of the README I forked from because I don't quite remember which libraries I actually used, but you'll definitely need, uh... a few of them.
 
 (along with some LED and screen fanciness)
 
