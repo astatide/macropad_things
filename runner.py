@@ -74,7 +74,6 @@ class Runner:
       return f"{text : <21}"
 
     def update_pixels_with_keymap(self, keymap=None):
-      self.pixels.brightness = 0.2 # TODO: put this elsewhere
       if keymap is not None:
         for k, v in keymap.items():
           self.pixels[k] = v[1]
@@ -170,12 +169,17 @@ class Runner:
       if self.macropad.encoder_switch_debounced.pressed:
         if self._state != -1:
           old_state = self._state
+          self._states[-1].activeState = old_state
+          self._states[-1].encoder_last = self.macropad.encoder
+          # self.macropad.encoder_position = old_state # reset the encoder, too.
           self.set_global_state(-1) # -1 is a "config" mode
           self.text[3].text = self._states[old_state].name
         else:
-          self.set_global_state(self.state.get_selected_state()) # if we're in config mode, get the selected highlighted state.
+          new_state = self.state.get_selected_state()
+          self._states[new_state].encoder_last = self.macropad.encoder # reset their rotary encoder.
+          # self.macropad.encoder_position = 0 # reset the encoder, too.
+          self.set_global_state(new_state) # if we're in config mode, get the selected highlighted state.
           self.set_hostname_os_display()
-
     # async def update_os_hostname_username(self):
     #   if (host_user_task.done()):
     #     hostname, username, os = (await self.futures)[0]
@@ -199,6 +203,7 @@ class Runner:
       host_user_task = asyncio.create_task(self.connect_and_get_username())
       blink_led_task = asyncio.create_task(self.blink_led())
       self.futures = asyncio.gather(host_user_task)
+      self.pixels.brightness = 0.2 # TODO: put this elsewhere
       hostNameSet = False
       modifier = 0
       while True:
@@ -214,7 +219,7 @@ class Runner:
             self.macropad.red_led = False
           print(hostNameSet)
         self.update_mode() # check if we clicked.
-        self.state.loop(self.macropad, self.text, self.kbd, self.color_additions)
+        self.state.loop(self.macropad, self.text, self.kbd, self.color_additions, self.pixels)
         self.text.show()
         if (self.state.use_rainbow):
           self.rainbow_scan(modifier, diff=20)

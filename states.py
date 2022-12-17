@@ -23,12 +23,13 @@ class State:
     self.use_rainbow = False
     self.rotary_label = ""
     self.control_volume = False
+    self.control_brightness = False
     self.rotary_enabled = self.control_volume
     self.update_frequency = 0.001
     self.isConfig = False
     self.encoder_last = 0
 
-  def loop(self, macropad, text, kbd, color_additions):
+  def loop(self, macropad, text, kbd, color_additions, pixels):
     if self.rotary_enabled:
       encoder_position = macropad.encoder
       if encoder_position > self.encoder_last:
@@ -36,13 +37,21 @@ class State:
           macropad.consumer_control.send(
             macropad.ConsumerControlCode.VOLUME_INCREMENT
           )
-          self.encoder_last = encoder_position
+        if self.control_brightness:
+          pixels.brightness += 0.05
+          self.rotary_label = f"{pixels.brightness} :Brightness"
+          text[2].text = f"{self.rotary_label : >21}"
+        self.encoder_last = encoder_position
       if encoder_position < self.encoder_last:
         if self.control_volume:
           macropad.consumer_control.send(
             macropad.ConsumerControlCode.VOLUME_DECREMENT
           )
-          self.encoder_last = encoder_position
+        if self.control_brightness:
+          pixels.brightness -= 0.05
+          self.rotary_label = f"{pixels.brightness} :Brightness"
+          text[2].text = f"{self.rotary_label : >21}"
+        self.encoder_last = encoder_position
 
     # send keyboard events mapped to keypad
     key_event = macropad.keys.events.get()
@@ -88,7 +97,7 @@ class ConfigState(State):
   def add_label(self, label):
     self.labels.append(label)
 
-  def loop(self, macropad, text, kbd, color_additions):
+  def loop(self, macropad, text, kbd, color_additions, *args, **kwargs):
     encoder_position = macropad.encoder
     if encoder_position > self.encoder_last:
       if self.activeState + 1 >= len(self.labels):
