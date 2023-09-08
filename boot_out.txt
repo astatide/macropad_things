@@ -1,2 +1,4 @@
-Adafruit CircuitPython 7.3.3 on 2022-08-29; Adafruit Macropad RP2040 with rp2040
+Adafruit CircuitPython 8.2.2 on 2023-07-31; Adafruit Macropad RP2040 with rp2040
 Board ID:adafruit_macropad_rp2040
+UID:DF61B0C2876E512F
+boot.py output:
